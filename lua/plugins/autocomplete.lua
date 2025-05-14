@@ -12,7 +12,10 @@ return {
       "hrsh7th/cmp-emoji",
     },
     -- @param opts cmp.ConfigSchema
-    opts = function(_, opts)
+    opts = function(_, _) -- We're intentionally ignoring the passed 'opts' for now
+      local opts = {} -- Create a new empty table
+      vim.inspect(opts)
+
       local has_words_before = function()
         unpack = unpack or table.unpack
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -22,11 +25,13 @@ return {
       local luasnip = require "luasnip"
       local cmp = require "cmp"
 
-      opts.mapping = vim.tbl_extend("force", opts.mapping, {
+      opts.mapping = vim.tbl_extend("force", opts.mapping or {}, { -- Initialize opts.mapping if it's nil
         ["<CR>"] = cmp.config.disable,
         ["<Tab>"] = cmp.mapping.confirm { select = true },
         ["<C-j>"] = cmp.mapping(function(fallback) end, { "i", "s" }),
       })
+
+      return opts
     end,
   },
 }
